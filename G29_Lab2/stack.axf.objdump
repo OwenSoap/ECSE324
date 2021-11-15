@@ -1,0 +1,51 @@
+
+//campus.mcgill.ca/EMF/ELE/yzhu412/Desktop/ECSE324/G29_Lab2/stack.axf:     file format elf32-littlearm
+
+
+Disassembly of section .text:
+
+00000000 <__cs3_interrupt_vector>:
+		.text
+		.global _start
+
+_start:
+			LDR R0, =N
+   0:	e59f0034 	ldr	r0, [pc, #52]	; 3c <NUMBERS+0xc>
+			LDR R1,[R0, #4]		// Load the first value into R1
+   4:	e5901004 	ldr	r1, [r0, #4]
+			LDR R2,[R0, #8]		// Load the second value into R2
+   8:	e5902008 	ldr	r2, [r0, #8]
+			LDR R3,[R0, #12]	// Load the third value into R3
+   c:	e590300c 	ldr	r3, [r0, #12]
+
+00000010 <PUSH>:
+
+PUSH:		STR R3, [SP, #-4]!	// PUSH the R3
+  10:	e52d3004 	push	{r3}		; (str r3, [sp, #-4]!)
+			STR R2, [SP, #-4]!	// PUSH the R2
+  14:	e52d2004 	push	{r2}		; (str r2, [sp, #-4]!)
+			STR R1, [SP, #-4]!	// PUSH the R1
+  18:	e52d1004 	push	{r1}		; (str r1, [sp, #-4]!)
+
+0000001c <POP>:
+
+POP: 		LDR R4, [SP], #4	// POP the value from top of the stack into R4
+  1c:	e49d4004 	pop	{r4}		; (ldr r4, [sp], #4)
+			LDR R4, [SP], #4	// POP the value from top of the stack into R4
+  20:	e49d4004 	pop	{r4}		; (ldr r4, [sp], #4)
+			LDR R4, [SP], #4	// POP the value from top of the stack into R4
+  24:	e49d4004 	pop	{r4}		; (ldr r4, [sp], #4)
+
+00000028 <END>:
+
+END:		B END				// Infinite loop
+  28:	eafffffe 	b	28 <END>
+
+0000002c <N>:
+  2c:	00000003 	.word	0x00000003
+
+00000030 <NUMBERS>:
+  30:	00000004 	.word	0x00000004
+  34:	00000005 	.word	0x00000005
+  38:	fffffffd 	.word	0xfffffffd
+  3c:	0000002c 	.word	0x0000002c

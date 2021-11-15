@@ -1,0 +1,68 @@
+
+//campus.mcgill.ca/EMF/ELE/yzhu412/Desktop/ECSE324/G29_Lab2/fibonacci2.axf:     file format elf32-littlearm
+
+
+Disassembly of section .text:
+
+00000000 <__cs3_interrupt_vector>:
+			.text                           
+          	.global _start
+_start:
+            LDR  	R0, N			// Load the vlaue of input into R0 
+   0:	e59f0054 	ldr	r0, [pc, #84]	; 5c <N>
+            PUSH 	{R4,LR}        	// PUSH R4 and LR into the stack
+   4:	e92d4010 	push	{r4, lr}
+            BL   	FIB             // Call FIB subroutine
+   8:	eb000002 	bl	18 <FIB>
+            POP  	{R4,LR}         // POP R4 and LR from stack
+   c:	e8bd4010 	pop	{r4, lr}
+            STR  	R0, [R4]        // Store the final resulr into R4
+  10:	e5840000 	str	r0, [r4]
+            B    	END             
+  14:	ea00000f 	b	58 <END>
+
+00000018 <FIB>:
+
+FIB:        CMP  	R0, #1         	// If the input value is greater than 1 
+  18:	e3500001 	cmp	r0, #1
+            BGT  	REC            	// Then call recursion subroutine
+  1c:	ca000001 	bgt	28 <REC>
+            MOV  	R0, #1         	// Otherwise make the result to be 1
+  20:	e3a00001 	mov	r0, #1
+			BX      LR              // Return to the main method
+  24:	e12fff1e 	bx	lr
+
+00000028 <REC>:
+
+REC:        MOV  	R1, R0         	// Put the input value into R1 used as counter 
+  28:	e1a01000 	mov	r1, r0
+            SUB  	R0, R1, #1      // Decrease R1 by one and load it in R0 so R0 will be n-1
+  2c:	e2410001 	sub	r0, r1, #1
+            PUSH 	{R1,LR}      	// PUSH R1 and LR into stack
+  30:	e92d4002 	push	{r1, lr}
+            BL   	FIB             // Back to FIB to check whether the R0 reaches 1
+  34:	ebfffff7 	bl	18 <FIB>
+            POP  	{R1,LR}      	// POP R1 and LR from stack
+  38:	e8bd4002 	pop	{r1, lr}
+            MOV  	R2, R0          // Move the value of R0 to R2 and let R2 to be n-1
+  3c:	e1a02000 	mov	r2, r0
+            SUB  	R0, R1, #2      // Make R0 to be n-2
+  40:	e2410002 	sub	r0, r1, #2
+            PUSH 	{R1,R2,LR}      // PUSH R1 R2 and LR into stack
+  44:	e92d4006 	push	{r1, r2, lr}
+            BL   	FIB             // Back to FIB to check whether R0 reaches 1
+  48:	ebfffff2 	bl	18 <FIB>
+            POP  	{R1,R2,LR}      // POP R1 R2 and LR from stack
+  4c:	e8bd4006 	pop	{r1, r2, lr}
+            ADD  	R0, R0, R2      // Adding value of n-2 and n-1 and store the result in R0
+  50:	e0800002 	add	r0, r0, r2
+			BX		LR
+  54:	e12fff1e 	bx	lr
+
+00000058 <END>:
+
+END:        B		END
+  58:	eafffffe 	b	58 <END>
+
+0000005c <N>:
+  5c:	00000005 	.word	0x00000005
